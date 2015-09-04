@@ -4,26 +4,26 @@ class OrigenInvalido
   end
 end
 
-class Object_Mock
+class ObjectMock
   def get_origenes
     self
   end
 end
 
-class Class_Mock
+class ClassMock
   def self.get_origenes
     self
   end
 end
 
-module Module_Mock
+module ModuleMock
   def self.get_origenes
     self
   end
 end
 
-class Regex_Mock
+class RegexMock
   def get_origenes
-    [Module_Mock, Class_Mock]
+    [ModuleMock, ClassMock]
   end
 end
