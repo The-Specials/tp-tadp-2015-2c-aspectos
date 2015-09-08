@@ -1,7 +1,15 @@
 module Origen
- def get_origenes
+  def get_origenes
    self
- end
+  end
+
+  def origin_method_names
+    instance_methods(true).concat(private_instance_methods(true))
+  end
+
+  def origin_methods
+    origin_method_names.map { |name| instance_method name }
+  end
 end
 
 class Class
@@ -14,6 +22,14 @@ end
 
 class Object
   include Origen
+
+  def origin_method_names
+    singleton_class.instance_methods(true).concat(singleton_class.private_instance_methods(true))
+  end
+
+  def origin_methods
+    origin_method_names.map { |name| method name }
+  end
 end
 
 class Regexp
