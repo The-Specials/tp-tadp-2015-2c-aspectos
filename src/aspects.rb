@@ -1,3 +1,5 @@
+require_relative 'Origen'
+
 class Aspects
   @origen
   attr_reader :fuentes
@@ -16,7 +18,7 @@ class Aspects
   end
 
   def self.on(*origenes)
-    @origen = origenes.select {|orig| @fuentes.include? orig}
+    @origen = origenes.each{|orig| orig.matches_to_any(@fuentes)}
     raise ArgumentError, 'origen vacío' if (origenes.empty? or @origen.empty?)
     end
   end
