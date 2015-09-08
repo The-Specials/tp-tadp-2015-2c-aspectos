@@ -1,15 +1,19 @@
 require 'rspec'
 require_relative '../src/aspects'
+require_relative '../src/origen'
 require_relative 'data/origen_mocks'
+require_relative 'data/methods_mock'
 
 describe Aspects do
 
-  let(:origen_valido) { ObjectMock.new }
-  let(:origen_invalido) { OrigenInvalido.new }
-  let(:instance) { ObjectMock.new }
-  let(:regex) { RegexMock.new }
+  include WithConditions
 
   describe '#on' do
+
+    let(:origen_valido) { ObjectMock.new }
+    let(:origen_invalido) { OrigenInvalido.new }
+    let(:instance) { ObjectMock.new }
+    let(:regex) { RegexMock.new }
 
     context 'when no arguments are passed' do
       it do
@@ -56,6 +60,42 @@ describe Aspects do
 
       it do
         expect(Aspects.on(instance, ModuleMock, regex, ClassMock) do end).to eq [instance, ModuleMock, ClassMock]
+      end
+    end
+
+  end
+
+  describe '#where' do
+
+    before(:all) do
+      Aspects.origenes = [MockClass, MockModule, true]
+    end
+
+    context 'when no method satisfy all conditions' do
+      it do
+        expect(Aspects.where(name(/zzzz/))).to eql []
+      end
+
+      it do
+        expect(Aspects.where(name(//), is_private, is_public)).to eql []
+      end
+
+      it do
+        expect(Aspects.where(name(//), is_private, has_parameters(16))).to eql []
+      end
+    end
+
+    context 'when some methods satisfy all conditions' do
+      it do
+        expect(Aspects.where(name(/^a_public_method/))).to eql [MockClass.instance_method(:a_public_method)]
+      end
+
+      it do
+        expected = [MockClass.instance_method(:a_public_method),
+                    MockClass.instance_method(:a_private_method),
+                    MockModule.instance_method(:a_module_method)]
+
+        expect(Aspects.where(name(/^a_/))).to eql expected
       end
     end
 

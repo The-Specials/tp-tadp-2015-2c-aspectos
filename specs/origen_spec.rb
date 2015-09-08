@@ -1,17 +1,18 @@
 require 'rspec'
 require_relative '../src/origen'
+require_relative 'data/methods_mock'
 
 describe 'Origen' do
 
-  let(:an_object) { Object.new }
-  let(:a_module) { Module.new }
-  let(:a_class) { Class.new }
+  let(:an_instance) { Object.new }
+  let(:a_module) { MockModule }
+  let(:a_class) { MockClass }
 
   describe 'get_origenes' do
 
     context 'when get_origenes is sended to a concrete Origen' do
       it do
-        expect(an_object.get_origenes).to be an_object
+        expect(an_instance.get_origenes).to be an_instance
       end
 
       it do
@@ -42,4 +43,62 @@ describe 'Origen' do
     end
 
   end
+
+  describe 'origin_method_names' do
+
+    it do
+      expect(a_class.origin_method_names).to include *a_class.private_instance_methods(true)
+      expect(a_class.origin_method_names).to include *a_class.instance_methods(true)
+    end
+
+    it do
+      expect(a_module.origin_method_names).to include *a_module.private_instance_methods(true)
+      expect(a_module.origin_method_names).to include *a_module.private_instance_methods(true)
+    end
+
+    it do
+      expect(an_instance.origin_method_names).to include *an_instance.singleton_class.private_instance_methods(true)
+      expect(an_instance.origin_method_names).to include *an_instance.singleton_class.private_instance_methods(true)
+    end
+
+    it do
+      def an_instance.an_instance_method
+      end
+
+      expect(an_instance.origin_method_names).to include(:an_instance_method)
+    end
+
+    it do
+      def a_class.a_class_method
+      end
+
+      expect(a_class.origin_method_names).not_to include(:a_class_method)
+    end
+
+    it do
+      def a_module.a_class_method
+      end
+
+      expect(a_module.origin_method_names).not_to include(:a_class_method)
+    end
+  end
+
+  describe 'origin_methods' do
+
+    it do
+      a_method = an_instance.method(:method)
+      expect(an_instance.origin_methods).to include a_method
+    end
+
+    it do
+      a_method = a_class.instance_method(:a_public_method)
+      expect(a_class.origin_methods).to include a_method
+    end
+
+    it do
+      a_method = a_module.instance_method(:a_module_method)
+      expect(a_module.origin_methods).to include a_method
+    end
+  end
+
 end
