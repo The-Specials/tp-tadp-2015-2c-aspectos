@@ -1,5 +1,5 @@
 module Origen
-  def get_origenes
+  def get_origin
    self
   end
 
@@ -33,7 +33,7 @@ class Object
 end
 
 class Regexp
-  def get_origenes
+  def get_origin
     valid_constants = Object.constants.select{ |c| self.match(c) }
     valid_constants.map{ |c| Object.const_get(c) }
   end

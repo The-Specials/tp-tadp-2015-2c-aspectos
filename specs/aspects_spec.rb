@@ -1,6 +1,6 @@
 require 'rspec'
 require_relative '../src/aspects'
-require_relative '../src/origen'
+require_relative '../src/origin'
 require_relative 'data/origen_mocks'
 require_relative 'data/methods_mock'
 
@@ -68,7 +68,7 @@ describe Aspects do
   describe '#where' do
 
     before(:all) do
-      Aspects.origenes = [MockClass, MockModule, true]
+      Aspects.origins = [MockClass, MockModule, true]
     end
 
     context 'when no method satisfy all conditions' do

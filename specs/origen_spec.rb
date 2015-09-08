@@ -1,5 +1,5 @@
 require 'rspec'
-require_relative '../src/origen'
+require_relative '../src/origin'
 require_relative 'data/methods_mock'
 
 describe 'Origen' do
@@ -12,33 +12,33 @@ describe 'Origen' do
 
     context 'when get_origenes is sended to a concrete Origen' do
       it do
-        expect(an_instance.get_origenes).to be an_instance
+        expect(an_instance.get_origin).to be an_instance
       end
 
       it do
-        expect(a_class.get_origenes).to be a_class
+        expect(a_class.get_origin).to be a_class
       end
 
       it do
-        expect(a_module.get_origenes).to be a_module
+        expect(a_module.get_origin).to be a_module
       end
     end
 
     context 'when get_origenes is sended to a Regex Origen' do
       it do
-        expect(/.*/.get_origenes.size).to eq(Object.constants.size)
+        expect(/.*/.get_origin.size).to eq(Object.constants.size)
       end
 
       it do
-        expect(/^O/.get_origenes).to include(Object, Origen)
+        expect(/^O/.get_origin).to include(Object, Origen)
       end
 
       it do
-        expect(/^[C|M|R]/.get_origenes).to include(Regexp, Module, Class)
+        expect(/^[C|M|R]/.get_origin).to include(Regexp, Module, Class)
       end
 
       it do
-        expect(/^ZZZZZZ/.get_origenes).to be_empty
+        expect(/^ZZZZZZ/.get_origin).to be_empty
       end
     end
 

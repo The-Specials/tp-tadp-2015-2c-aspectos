@@ -1,18 +1,18 @@
 module WithConditions
   def name regex
-    lambda{|metodo| regex.match(metodo.name) }
+    lambda{|method| regex.match(method.name) }
   end
 
   def is_private
-    lambda{|metodo| metodo.owner.private_instance_methods.include? metodo.name }
+    lambda{|method| method.owner.private_instance_methods.include? method.name }
   end
 
   def is_public
-    lambda{|metodo| metodo.owner.public_instance_methods.include? metodo.name }
+    lambda{|method| method.owner.public_instance_methods.include? method.name }
   end
 
   def has_parameters(number, block_type = lambda{|arg| true})
-    lambda{|metodo| metodo.parameters.count(&block_type) == number}
+    lambda{|method| method.parameters.count(&block_type) == number}
   end
 
   def mandatory
@@ -24,7 +24,7 @@ module WithConditions
   end
 
   def neg(condition, *more_conditions)
-    more_conditions.unshift condition
-    lambda{|method| not more_conditions.any? {|condition| condition.call(method)}}
+    conditions = more_conditions.unshift condition
+    lambda{|method| not conditions.any? {|condition| condition.call(method)}}
   end
 end
