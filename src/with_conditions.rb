@@ -15,16 +15,17 @@ module WithConditions
     lambda{|method| method.parameters.count(&block_type) == number}
   end
 
+  def neg(condition, *more_conditions)
+    conditions = more_conditions.unshift condition
+    lambda{|method| not conditions.any? {|condition| condition.call(method)}}
+  end
+
+  private
   def mandatory
     lambda{|arg| arg[0] == :req}
   end
 
   def optional
     lambda{|arg| arg[0] == :opt}
-  end
-
-  def neg(condition, *more_conditions)
-    conditions = more_conditions.unshift condition
-    lambda{|method| not conditions.any? {|condition| condition.call(method)}}
   end
 end
