@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8e53f244-2880-4438-a551-b5ae676432fb" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/aspects.rb" afterPath="$PROJECT_DIR$/src/aspects.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/aspects_spec.rb" afterPath="$PROJECT_DIR$/test/aspects_spec.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/tp-tadp-2015-2c-aspectos.iml" afterPath="$PROJECT_DIR$/.idea/tp-tadp-2015-2c-aspectos.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="8e53f244-2880-4438-a551-b5ae676432fb" name="Default" comment="" />
     <ignored path="tp-tadp-2015-2c-aspectos.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
