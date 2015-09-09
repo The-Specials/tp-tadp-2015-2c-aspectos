@@ -1,4 +1,4 @@
-class Transformacion
+module Transformacion
 
   def transform(&block)
 
@@ -23,4 +23,8 @@ class Transformacion
   def instead_of
 
   end
+end
+
+class Aspects
+  include Transformacion
 end
