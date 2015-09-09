@@ -1,7 +1,7 @@
 module Origen
-  def matches_to_any(*fuentes)
-    self if fuentes.include? self
-    end
+  def get_match(fuentes)
+    self
+  end
   end
   class Class
   include Origen
@@ -16,7 +16,7 @@ module Origen
   end
 
   class Regexp
-  def matches_to_any(*fuentes)
+  def get_match(fuentes)
    fuentes.select{|fuente| self.match(fuente.to_s)}
   end
 end

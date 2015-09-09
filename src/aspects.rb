@@ -1,4 +1,6 @@
 require_relative 'Origen'
+require_relative 'Transformacion'
+require_relative 'Condicion'
 
 class Aspects
   @origen
@@ -17,8 +19,16 @@ class Aspects
     @fuentes = fuentes_nuevas
   end
 
+  def self.fuentes
+    @fuentes
+  end
+
+  def self.convertir_origenes(origenes)
+    origenes.map{|orig| orig.get_match(@fuentes)}.flatten
+  end
+
   def self.on(*origenes)
-    @origen = origenes.each{|orig| orig.matches_to_any(@fuentes)}
-    raise ArgumentError, 'origen vacío' if (origenes.empty? or @origen.empty?)
+    @origen = @fuentes.select{|fuente| (convertir_origenes origenes).include? fuente}
+    raise ArgumentError, 'origen vacio' unless  @origen.any?
     end
   end
