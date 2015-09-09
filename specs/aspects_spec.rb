@@ -93,7 +93,8 @@ describe Aspects do
       it do
         expected = [MockClass.instance_method(:a_public_method),
                     MockClass.instance_method(:a_private_method),
-                    MockModule.instance_method(:a_module_method)]
+                    MockModule.instance_method(:a_module_method),
+                    MockModule.instance_method(:a_private_method)]
 
         expect(Aspects.where(name(/^a_/))).to eql expected
       end
