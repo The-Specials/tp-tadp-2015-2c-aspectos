@@ -1,4 +1,4 @@
-class Condicion
+module Condicion
 
   def name
 
@@ -19,4 +19,8 @@ class Condicion
   def neg
 
   end
+end
+
+class Aspects
+  include Condicion
 end
