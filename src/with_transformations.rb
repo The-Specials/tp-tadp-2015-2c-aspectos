@@ -29,4 +29,11 @@ module WithTransformations
       method.owner.send(:define_method, method.name, proc{ |*args| send(old_name, *args); instance_eval &extend_behavior } )
     end
   end
+
+  private
+  def transform &behavior
+    lambda do |method|
+      method.owner.send(:define_method, method.name, &behavior )
+    end
+  end
 end
