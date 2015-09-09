@@ -24,13 +24,24 @@ end
 
 module Moo
   extend Origin
+
+  def m1_moo
+  end
+
+  def m2_moo
+  end
+
 end
 
 describe 'Aspects' do
 
+  let(:foo) { Foo.new }
+
   before(:all) do
+    Object.send(:include, Origin)
+    Class.send(:include, Origin)
     Regexp.send(:include, Origin)
-    @foo = Foo.new
+    Module.send(:include, Origin)
   end
 
   describe '#do' do
@@ -42,7 +53,7 @@ describe 'Aspects' do
       end
 
       it 'an object' do
-        Aspects.on @foo do end
+        Aspects.on foo do end
       end
 
       it 'a Module' do
@@ -58,7 +69,7 @@ describe 'Aspects' do
       end
 
       it 'an object, a Regexp, a Class and a Module' do
-        Aspects.on @foo, /Foo/, Bar, Moo do end
+        Aspects.on foo, /Foo/, Bar, Moo do end
       end
 
     end
@@ -89,8 +100,57 @@ describe 'Aspects' do
      end
 
      it 'a single name selector using an object' do
-       array = Aspects.on @foo do
+       array = Aspects.on foo do
          where name(/m1_foo/)
+       end
+       expect(array).to eq [:m1_foo]
+     end
+
+     it 'several name selectors using an object' do
+       array = Aspects.on foo do
+         where name(/m1_foo/), name(/m2_foo/)
+       end
+       expect(array).to eq [:m1_foo, :m2_foo]
+     end
+
+     it 'several name selectors using a Class' do
+       array = Aspects.on Bar do
+         where name(/m1/)
+       end
+       expect(array).to eq [:m1_bar]
+     end
+
+     it 'several name selectors using several classes' do
+       array = Aspects.on Foo, Bar do
+         where name(/m/)
+       end
+       expect(array.sort).to eq [:m1_foo, :m2_foo, :m1_bar].sort
+     end
+
+     it 'several redundant name selectors using modules and classes' do
+       array = Aspects.on Moo, Bar do
+         where name(/m/), name(/m/), name(/m/), name(/m/)
+       end
+       expect(array.sort).to eq [:m1_bar, :m1_moo, :m2_moo].sort
+     end
+
+     it 'anything using several regexes' do
+       array = Aspects.on /\bFoo\b/, /\bBar\b/, /\bMoo\b/ do
+         where name(//)
+       end
+       expect(array.sort).to eq [:m1_foo, :m2_foo, :m1_bar, :m1_moo, :m2_moo].sort
+     end
+
+     it 'a negation on a name selector' do
+       array = Aspects.on Foo do
+         where neg(name(/1/))
+       end
+       expect(array).to eq [:m2_foo]
+     end
+
+     it 'a double negation on a name selector' do
+       array = Aspects.on Foo do
+         where neg(neg(name(/1/)))
        end
        expect(array).to eq [:m1_foo]
      end
