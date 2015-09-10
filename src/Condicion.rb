@@ -1,7 +1,7 @@
 module Condicion
 
-  def name
-
+  def name(regex)
+    get_methods.select{|metodo| regex.match(metodo.to_s)}
   end
 
   def has_parameters
@@ -21,6 +21,6 @@ module Condicion
   end
 end
 
-class Aspects
+class Class
   include Condicion
 end
