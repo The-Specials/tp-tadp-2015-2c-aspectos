@@ -15,9 +15,14 @@ class Aspects
     @origen = origenes_nuevos
   end
 
+  def self.metodos
+    @metodos
+  end
+
   def initialize
-    @origen = []
-    @fuentes =[]
+    @origen= []
+    @fuentes= []
+    @metodos= []
   end
 
   def self.set_fuentes(*fuentes_nuevas)
@@ -30,8 +35,7 @@ class Aspects
 
 
   def self.get_methods
-    origenes = @origen
-    return origenes.map{|orig| orig.methods}.flatten
+     @origen.map{|orig| orig.methods}.flatten
   end
 
 

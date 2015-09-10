@@ -26,4 +26,5 @@ module Origen
   def get_match(fuentes)
    fuentes.select{|fuente| self.match(fuente.to_s)}
   end
-end
+  end
+
