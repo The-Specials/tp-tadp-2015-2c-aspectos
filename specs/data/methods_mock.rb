@@ -2,8 +2,7 @@ class MockClass
   attr_accessor :aux
 
   def a_public_method(a = 10, b=12, c)
-    a + b + c
-    puts self
+    @aux = (@aux || a) + b + c
   end
 
   def another_method
@@ -35,6 +34,6 @@ class AnotherMockedClass
   attr_accessor :aux
 
   def a_public_method(a, b = 'AnotherMockedClass')
-    'Im ' + (aux || a) + ' from ' + b
+    @aux = 'Im ' + (@aux || a) + ' from ' + b
   end
 end

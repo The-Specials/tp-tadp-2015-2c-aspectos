@@ -11,12 +11,12 @@ describe WithTransformations do
   let(:a_method) {MockClass.instance_method :a_public_method}
   let(:another_method) {AnotherMockedClass.instance_method :a_public_method}
 
-  a_method_orig = MockClass.new.method :a_public_method
-  another_method_orig = AnotherMockedClass.new.method :a_public_method
+  a_method_orig = MockClass.instance_method :a_public_method
+  another_method_orig = AnotherMockedClass.instance_method :a_public_method
 
   before(:each) do
-    MockClass.send(:define_method, :a_public_method, &a_method_orig)
-    AnotherMockedClass.send(:define_method, :a_public_method, &another_method_orig)
+    MockClass.send(:define_method, :a_public_method, proc{ |*args| a_method_orig.bind(self).call *args })
+    AnotherMockedClass.send(:define_method, :a_public_method, proc{ |*args| another_method_orig.bind(self).call *args })
   end
 
   describe '#inject' do
@@ -57,27 +57,27 @@ describe WithTransformations do
   end
 
   describe '#after' do
+    it do
+      after{ @aux }.call a_method
+      expect(an_object.a_public_method 10).to eql 32
+    end
 
+    it do
+      after{ @aux }.call another_method
+      expect(another_object.a_public_method 'an after method').to eql 'Im an after method from AnotherMockedClass'
+    end
   end
 
   describe '#before' do
     it do
-      before do
-        @aux = 99
-        puts self
-      end.call a_method
-      an_object.a_public_method 0, 1, 2
-      #expect(an_object.a_public_method 0, 1, 2).to eql an_object
-      #expect(an_object.aux).to eql 99
-      puts an_object
+      before{ @aux = 20 }.call a_method
+      expect(an_object.a_public_method 0, 1, 2).to eql 23
     end
 
-    # it do
-    #   before do
-    #     puts self == another_method
-    #   end.call another_method
-    #   expect(another_object.a_public_method '', ' the original method').to eql 'Im a before from AnotherMockedClass'
-    # end
+    it do
+      before{ @aux = 'a before' }.call another_method
+      expect(another_object.a_public_method '', 'the original method').to eql 'Im a before from the original method'
+    end
   end
 
 end
