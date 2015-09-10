@@ -1,6 +1,6 @@
 require 'rspec'
 require_relative '../src/with_conditions'
-require_relative '../specs/data/methods_mock'
+require_relative '../specs/data/mocks_for_conditions'
 
 describe WithConditions do
 

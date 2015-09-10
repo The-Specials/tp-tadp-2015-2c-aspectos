@@ -1,22 +1,22 @@
 require 'rspec'
 require_relative '../src/with_transformations'
-require_relative '../specs/data/methods_mock'
+require_relative 'data/mocks_for_transformations'
 
 describe WithTransformations do
 
   include WithTransformations
 
-  let(:an_object) {MockClass.new}
-  let(:another_object) {AnotherMockedClass.new}
-  let(:a_method) {MockClass.instance_method :a_public_method}
-  let(:another_method) {AnotherMockedClass.instance_method :a_public_method}
+  let(:an_object) {AClass.new}
+  let(:another_object) {AnotherClass.new}
+  let(:a_method) {AClass.instance_method :a_public_method}
+  let(:another_method) {AnotherClass.instance_method :a_public_method}
 
-  a_method_orig = MockClass.instance_method :a_public_method
-  another_method_orig = AnotherMockedClass.instance_method :a_public_method
+  a_method_orig = AClass.instance_method :a_public_method
+  another_method_orig = AnotherClass.instance_method :a_public_method
 
   before(:each) do
-    MockClass.send(:define_method, :a_public_method, proc{ |*args| a_method_orig.bind(self).call *args })
-    AnotherMockedClass.send(:define_method, :a_public_method, proc{ |*args| another_method_orig.bind(self).call *args })
+    AClass.send(:define_method, :a_public_method, proc{ |*args| a_method_orig.bind(self).call *args })
+    AnotherClass.send(:define_method, :a_public_method, proc{ |*args| another_method_orig.bind(self).call *args })
   end
 
   describe '#inject' do
