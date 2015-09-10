@@ -1,11 +1,10 @@
 module Condicion
 
   def name(regex)
-    get_methods.select{|metodo| regex.match(metodo.to_s)}
+    lambda {|metodo| regex.match(metodo.to_s)}
   end
 
   def has_parameters(num_param, *tipo)
-    get_methods.select{|metodo| method.parameters.count{|parametro| parametro.is(tipo)}}
   end
 
   def is_public

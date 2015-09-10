@@ -4,8 +4,7 @@ module Transformacion
 
   end
 
-  def inject
-
+  def inject(&block)
   end
 
   def redirect_to

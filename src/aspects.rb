@@ -49,6 +49,10 @@ class Aspects
   end
 
   def self.where(*condiciones)
-    @metodos = @origen.each{|orig| orig.methods}.select{|metodo| metodo.satisfy{condiciones}}
+    @metodos = @origen.each{|orig| orig.methods}.select{|metodo| satisfies metodo, condiciones}
+  end
+
+  def self.satisfies(metodo, condiciones)
+    condiciones.all?{|condicion| condicion.call(metodo)}
   end
   end
