@@ -2,6 +2,7 @@ module Origen
   def get_match(fuentes)
     self
   end
+
   end
   class Class
   include Origen
@@ -13,6 +14,12 @@ module Origen
 
   class Object
   include Origen
+
+    def methods
+      publicos = public_methods false
+      privados = private_methods false
+      publicos.concat(privados)
+     end
   end
 
   class Regexp
