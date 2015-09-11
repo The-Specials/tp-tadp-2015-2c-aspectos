@@ -1,12 +1,14 @@
 require 'rspec'
 require_relative '../src/aspects'
 require_relative '../src/origin'
-require_relative 'data/origen_mocks'
-require_relative 'data/methods_mock'
+require_relative 'data/origin_mocks'
+require_relative 'data/mocks_for_conditions'
+require_relative 'data/mocks_for_transformations'
 
 describe Aspects do
 
   include WithConditions
+  include WithTransformations
 
   describe '#on' do
 
@@ -93,11 +95,40 @@ describe Aspects do
       it do
         expected = [MockClass.instance_method(:a_public_method),
                     MockClass.instance_method(:a_private_method),
-                    MockModule.instance_method(:a_module_method)]
+                    MockModule.instance_method(:a_module_method),
+                    MockModule.instance_method(:a_private_method)]
 
         expect(Aspects.where(name(/^a_/))).to eql expected
       end
     end
 
   end
+
+  describe '#transform' do
+
+    an_object = AClass.new
+    another_object = AnotherClass.new
+    method_list = [AClass.instance_method(:a_public_method),
+                   AClass.instance_method(:another_method)]
+
+    a_public_method = AClass.instance_method :a_public_method
+    another_method = AClass.instance_method :another_method
+
+    before(:each) do
+      AClass.send(:define_method, :a_public_method, proc{ |*args| a_public_method.bind(self).call *args })
+      AClass.send(:define_method, :another_method, proc{ |*args| another_method.bind(self).call *args })
+    end
+
+
+    it do
+      Aspects.transform *method_list do redirect_to(another_object) end
+      expect(an_object.a_public_method 'a method').to eql 'Im a method from AnotherMockedClass'
+    end
+
+    it do
+      Aspects.transform *method_list do redirect_to(another_object) end
+      expect(an_object.another_method).to eql 'Im from MockModule'
+    end
+  end
+
 end

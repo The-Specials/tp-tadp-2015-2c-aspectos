@@ -2,6 +2,9 @@ class MockClass
   def a_public_method(a = 10, b=12, c)
   end
 
+  def another_method
+  end
+
   private
   def a_private_method
   end
@@ -14,7 +17,10 @@ module MockModule
   def a_module_method(a = 10, b=12, c)
   end
 
+  def another_method
+  end
+
   private
-  def another_module_method(a)
+  def a_private_method(a)
   end
 end

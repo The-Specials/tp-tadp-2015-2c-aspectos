@@ -1,6 +1,6 @@
 require 'rspec'
 require_relative '../src/origin'
-require_relative 'data/methods_mock'
+require_relative 'data/mocks_for_conditions'
 
 describe 'Origen' do
 
