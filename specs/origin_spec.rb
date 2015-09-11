@@ -44,6 +44,20 @@ describe 'Origen' do
 
   end
 
+  describe 'owner' do
+    it do
+      expect(a_class.origin_methods[0].owner).to be a_class
+    end
+
+    it do
+      expect(a_module.origin_methods[0].owner).to be a_module
+    end
+
+    it do
+      expect(an_instance.origin_methods[0].owner).to eql an_instance.singleton_class
+    end
+  end
+
   describe 'origin_method_names' do
 
     it do
@@ -66,6 +80,7 @@ describe 'Origen' do
       end
 
       expect(an_instance.origin_method_names).to include(:an_instance_method)
+      expect(an_instance.origin_method_names).to include(:get_origin)
     end
 
     it do
@@ -84,11 +99,6 @@ describe 'Origen' do
   end
 
   describe 'origin_methods' do
-
-    it do
-      a_method = an_instance.method(:method)
-      expect(an_instance.origin_methods).to include a_method
-    end
 
     it do
       a_method = a_class.instance_method(:a_public_method)

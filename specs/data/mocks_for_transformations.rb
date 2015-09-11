@@ -1,9 +1,14 @@
 class AClass
+  def aux= value
+    @aux = value
+  end
+
   def a_public_method(a = 10, b=12, c)
     @aux = (@aux || a) + b + c
   end
 
   def another_method
+    @aux
   end
 
   private
@@ -16,6 +21,7 @@ end
 
 module AModule
   def a_module_method(a = 10, b=12, c)
+    @aux = (@aux || a) * b * c
   end
 
   def another_method
