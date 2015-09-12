@@ -119,15 +119,29 @@ describe Aspects do
       AClass.send(:define_method, :another_method, proc{ |*args| another_method.bind(self).call *args })
     end
 
-
     it do
-      Aspects.transform *method_list do redirect_to(another_object) end
+      Aspects.transform method_list do redirect_to(another_object) end
       expect(an_object.a_public_method 'a method').to eql 'Im a method from AnotherMockedClass'
+      expect(an_object.another_method).to eql 'Im from MockModule'
     end
 
     it do
-      Aspects.transform *method_list do redirect_to(another_object) end
-      expect(an_object.another_method).to eql 'Im from MockModule'
+      Aspects.transform method_list do instead { self } end
+      expect(an_object.a_public_method).to eql an_object
+      expect(an_object.another_method).to eql an_object
+    end
+
+    it do
+      Aspects.transform method_list do before { @aux = 20 } end
+      expect(an_object.a_public_method 0, 1, 2).to eql 23
+      expect(an_object.another_method).to eql 20
+    end
+
+    it do
+      an_object.aux = nil
+      Aspects.transform method_list do after { @aux } end
+      expect(an_object.a_public_method 10).to eql 32
+      expect(an_object.another_method).to eql 32
     end
   end
 

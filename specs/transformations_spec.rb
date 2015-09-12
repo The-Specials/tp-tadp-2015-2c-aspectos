@@ -1,4 +1,5 @@
 require 'rspec'
+require_relative '../src/origin'
 require_relative '../src/with_transformations'
 require_relative 'data/mocks_for_transformations'
 
@@ -10,13 +11,17 @@ describe WithTransformations do
   let(:another_object) {AnotherClass.new}
   let(:a_method) {AClass.instance_method :a_public_method}
   let(:another_method) {AnotherClass.instance_method :a_public_method}
+  let(:a_module_method) {AModule.instance_method :a_module_method}
+  let(:an_instance_method) {an_object.origin_method :a_public_method}
 
   a_method_orig = AClass.instance_method :a_public_method
   another_method_orig = AnotherClass.instance_method :a_public_method
+  a_module_method = AModule.instance_method :a_module_method
 
   before(:each) do
     AClass.send(:define_method, :a_public_method, proc{ |*args| a_method_orig.bind(self).call *args })
     AnotherClass.send(:define_method, :a_public_method, proc{ |*args| another_method_orig.bind(self).call *args })
+    AModule.send(:define_method, :a_module_method, proc{ |*args| a_module_method.bind(self).call *args })
   end
 
   describe '#inject' do
@@ -77,6 +82,30 @@ describe WithTransformations do
     it do
       before{ @aux = 'a before' }.call another_method
       expect(another_object.a_public_method '', 'the original method').to eql 'Im a before from the original method'
+    end
+  end
+
+  context 'when a transformation is aplied to methods of a Class origin' do
+    it do
+      before{ @aux = 20 }.call a_method
+      expect(an_object.a_public_method 0, 1, 2).to eql 23
+      expect(AClass.new.a_public_method 0, 1, 2).to eql 23
+    end
+  end
+
+  context 'when a transformation is aplied to methods of a Module origin' do
+    it do
+      before{ @aux = 20 }.call a_module_method
+      expect(AnotherClass.new.a_module_method 0, 1, 2).to eql 40
+      expect(AnotherClass.new.a_module_method 0, 1, 2).to eql 40
+    end
+  end
+
+  context 'when a transformation is aplied to methods of an instance origin' do
+    it 'should only affect that instance' do
+      before{ @aux = 20 }.call an_instance_method
+      expect(an_object.a_public_method 0, 1, 2).to eql 23
+      expect(AClass.new.a_public_method 0, 1, 2).to eql 3
     end
   end
 
