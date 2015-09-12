@@ -36,4 +36,6 @@ describe 'Aspects test' do
       expect(Aspects.origen). to eq [Evil_class_666, MiClase]
     end
 
+
+
 end
