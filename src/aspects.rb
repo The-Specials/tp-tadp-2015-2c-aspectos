@@ -26,7 +26,7 @@ class Aspects
     @@origins.map{ |o| o.origin_methods }.flatten.select{ |method| satisfy_all?(method, conditions) }
   end
 
-  def self.transform *methods, &block
+  def self.transform methods, &block
     instance_eval &block
     methods.each{ |method| transformations.each{ |transformation| transformation.call(method) } }
   end
