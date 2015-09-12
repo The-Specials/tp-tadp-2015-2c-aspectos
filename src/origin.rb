@@ -1,4 +1,4 @@
-module Origen
+module Origin
   def get_origin
    self
   end
@@ -17,15 +17,15 @@ module Origen
 end
 
 class Class
-  include Origen
+  include Origin
 end
 
 class Module
-  include Origen
+  include Origin
 end
 
 class Object
-  include Origen
+  include Origin
 
   def origin_method_names
     methods(true).concat(private_methods(true))

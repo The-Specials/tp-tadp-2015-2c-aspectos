@@ -30,7 +30,7 @@ describe 'Origen' do
       end
 
       it do
-        expect(/^O/.get_origin).to include(Object, Origen)
+        expect(/^O/.get_origin).to include(Object, Origin)
       end
 
       it do
