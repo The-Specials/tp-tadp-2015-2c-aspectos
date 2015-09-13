@@ -1,18 +1,13 @@
 class Aspects
-
-  def self.origins= origins
-    @@origins = origins
-  end
-
   def self.on source, *more_sources, &block
     sources = more_sources.unshift source
-    @@origins = sources.map { |f| f.get_origin() }.flatten.compact.uniq
+    origins = sources.map { |f| f.get_origin() }.flatten.uniq
 
-    raise ArgumentError, 'origen vacio' unless @@origins.any?
+    raise ArgumentError, 'origen vacio' if origins.empty?
 
-    @@origins.each{ |origin| origin.public_initialize; origin.instance_eval &block }
+    origins.each{ |origin| origin.public_initialize; origin.instance_eval &block }
 
-    return @@origins
+    return origins
   end
 end
 
