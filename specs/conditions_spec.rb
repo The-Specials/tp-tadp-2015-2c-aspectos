@@ -10,13 +10,13 @@ describe WithConditions do
   let(:a_public_method) { MockClass.instance_method(:a_public_method) }
   let(:a_private_method) { MockClass.instance_method(:a_private_method) }
 
-  describe '#name' do
+  describe '#names' do
     it do
-      expect(name(/^a_public_method$/).call(a_method)).to be_truthy
+      expect(names(/^a_public_method$/).call(a_method)).to be_truthy
     end
 
     it do
-      expect(name(/foo/).call(a_method)).to be_falsey
+      expect(names(/foo/).call(a_method)).to be_falsey
     end
   end
 
@@ -67,15 +67,15 @@ describe WithConditions do
 
   describe '#neg' do
     it do
-      expect(neg(name(/^a_public_method$/)).call(a_public_method)).to be_falsey
+      expect(neg(names(/^a_public_method$/)).call(a_public_method)).to be_falsey
     end
 
     it do
-      expect(neg(name(/foo/)).call(a_public_method)).to be_truthy
+      expect(neg(names(/foo/)).call(a_public_method)).to be_truthy
     end
 
     it do
-      expect(neg(name(/foo/), name(/^a$/)).call(a_public_method)).to be_truthy
+      expect(neg(names(/foo/), names(/^a$/)).call(a_public_method)).to be_truthy
     end
 
     it do

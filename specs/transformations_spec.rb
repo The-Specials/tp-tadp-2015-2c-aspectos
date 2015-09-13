@@ -4,23 +4,23 @@ require_relative '../src/with_transformations'
 require_relative 'data/mocks_for_transformations'
 
 describe WithTransformations do
-
   include WithTransformations
 
   let(:an_object) {AClass.new}
   let(:another_object) {AnotherClass.new}
-  let(:a_method) {AClass.instance_method :a_public_method}
-  let(:another_method) {AnotherClass.instance_method :a_public_method}
-  let(:a_module_method) {AModule.instance_method :a_module_method}
   let(:an_instance_method) {an_object.origin_method :a_public_method}
 
-  a_method_orig = AClass.instance_method :a_public_method
-  another_method_orig = AnotherClass.instance_method :a_public_method
+  a_method = AClass.instance_method :a_public_method
+  another_method = AClass.instance_method :another_method
+  another_public_method = AnotherClass.instance_method :a_public_method
   a_module_method = AModule.instance_method :a_module_method
 
   before(:each) do
-    AClass.send(:define_method, :a_public_method, proc{ |*args| a_method_orig.bind(self).call *args })
-    AnotherClass.send(:define_method, :a_public_method, proc{ |*args| another_method_orig.bind(self).call *args })
+    public_initialize
+    AClass.public_initialize
+    AClass.send(:define_method, :a_public_method, proc{ |*args| a_method.bind(self).call *args })
+    AClass.send(:define_method, :another_method, proc{ |*args| another_method.bind(self).call *args })
+    AnotherClass.send(:define_method, :a_public_method, proc{ |*args| another_public_method.bind(self).call *args })
     AModule.send(:define_method, :a_module_method, proc{ |*args| a_module_method.bind(self).call *args })
   end
 
@@ -56,7 +56,7 @@ describe WithTransformations do
       it do
         instead do |x, y|
           x + y
-        end.call another_method
+        end.call another_public_method
         expect(another_object.a_public_method 2, 3).to eql 5
       end
   end
@@ -68,7 +68,7 @@ describe WithTransformations do
     end
 
     it do
-      after{ @aux }.call another_method
+      after{ @aux }.call another_public_method
       expect(another_object.a_public_method 'an after method').to eql 'Im an after method from AnotherMockedClass'
     end
   end
@@ -80,7 +80,7 @@ describe WithTransformations do
     end
 
     it do
-      before{ @aux = 'a before' }.call another_method
+      before{ @aux = 'a before' }.call another_public_method
       expect(another_object.a_public_method '', 'the original method').to eql 'Im a before from the original method'
     end
   end
@@ -106,6 +106,35 @@ describe WithTransformations do
       before{ @aux = 20 }.call an_instance_method
       expect(an_object.a_public_method 0, 1, 2).to eql 23
       expect(AClass.new.a_public_method 0, 1, 2).to eql 3
+    end
+  end
+
+  describe '#transform' do
+    method_list = [a_method, another_method]
+
+    it do
+      AClass.transform method_list do redirect_to(AnotherClass.new) end
+      expect(an_object.a_public_method 'a method').to eql 'Im a method from AnotherMockedClass'
+      expect(an_object.another_method).to eql 'Im from MockModule'
+    end
+
+    it do
+      AClass.transform method_list do instead { self } end
+      expect(an_object.a_public_method).to eql an_object
+      expect(an_object.another_method).to eql an_object
+    end
+
+    it do
+      AClass.transform method_list do before { @aux = 20 } end
+      expect(an_object.a_public_method 0, 1, 2).to eql 23
+      expect(an_object.another_method).to eql 20
+    end
+
+    it do
+      an_object.aux = nil
+      AClass.transform method_list do after { @aux } end
+      expect(an_object.a_public_method 10).to eql 32
+      expect(an_object.another_method).to eql 32
     end
   end
 

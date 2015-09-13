@@ -111,4 +111,41 @@ describe 'Origen' do
     end
   end
 
+  describe '#where' do
+
+    context 'when no method satisfy all conditions' do
+      it do
+        expect(MockClass.where(names(/zzzz/))).to eql []
+      end
+
+      it do
+        expect(MockModule.where(names(//), is_private, is_public)).to eql []
+      end
+
+      it do
+        expect(true.where(names(//), is_private, has_parameters(16))).to eql []
+      end
+    end
+
+    context 'when some methods satisfy all conditions' do
+      it do
+        expect(MockClass.where(names(/^a_public_method/))).to eql [MockClass.instance_method(:a_public_method)]
+      end
+
+      it do
+        expected = [MockClass.instance_method(:a_public_method),
+                    MockClass.instance_method(:a_private_method),]
+
+        expect(MockClass.where(names(/^a_/))).to eql expected
+      end
+
+      it do
+        expected = [MockModule.instance_method(:a_module_method),
+                    MockModule.instance_method(:a_private_method)]
+
+        expect(MockModule.where(names(/^a_/))).to eql expected
+      end
+    end
+
+  end
 end
