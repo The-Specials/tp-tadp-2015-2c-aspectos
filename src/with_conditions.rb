@@ -1,5 +1,11 @@
 module WithConditions
-  def name regex
+
+  def where condition, *more_conditions
+    conditions = more_conditions.unshift condition
+    origin_methods.select{ |method| satisfy_all?(method, conditions) }
+  end
+
+  def names regex
     lambda{|method| regex.match(method.name) }
   end
 
@@ -21,6 +27,10 @@ module WithConditions
   end
 
   private
+  def satisfy_all?(method, conditions)
+    conditions.all?{|condition| condition.call method}
+  end
+
   def mandatory
     lambda{|arg| arg[0] == :req}
   end

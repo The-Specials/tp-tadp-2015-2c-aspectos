@@ -1,4 +1,10 @@
+require_relative 'with_conditions'
+require_relative 'with_transformations'
+
 module Origin
+  include WithConditions
+  include WithTransformations
+
   def get_origin
    self
   end
