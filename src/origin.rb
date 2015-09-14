@@ -22,10 +22,6 @@ module Origin
   end
 end
 
-class Class
-  include Origin
-end
-
 class Module
   include Origin
 end
@@ -33,17 +29,17 @@ end
 class Object
   include Origin
 
-  def origin_method_names
-    methods(true).concat(private_methods(true))
+  def instance_methods all
+    methods all
   end
 
-  def origin_methods
-    origin_method_names.map { |name| get_origin_method(name, self.singleton_class) }
+  def private_instance_methods all
+    private_methods all
   end
 
-  private
-  def get_origin_method method, owner
-    origin_method = method(method)
+  def instance_method sym
+    owner = singleton_class
+    origin_method = method(sym)
     origin_method.send :define_singleton_method, :owner, proc{ owner }
 
     return origin_method
@@ -56,19 +52,3 @@ class Regexp
     valid_constants.map{ |c| Object.const_get(c) }
   end
 end
-
-#opcion para evitar efecto sobre el metodo en origin_methods
-# class OriginMethod < UnboundMethod
-#   def initialize original_method, eigen_class
-#     @method = original_method
-#     @eigen_class = eigen_class
-#   end
-#
-#   def owner
-#     @eigen_class
-#   end
-#
-#   def method_missing invoked_method, *args
-#     @method.send invoked_method, *args
-#   end
-# end
