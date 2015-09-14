@@ -1,9 +1,7 @@
 require_relative 'with_conditions'
-require_relative 'with_transformations'
 
 module Origin
   include WithConditions
-  include WithTransformations
 
   def get_origin
    self
@@ -19,6 +17,10 @@ module Origin
 
   def origin_method name
     origin_methods.detect{ |method| method.name.eql? name }
+  end
+
+  def transform methods, &block
+    methods.each{ |method| method.instance_eval &block }
   end
 end
 
@@ -39,7 +41,7 @@ class Object
 
   def instance_method sym
     owner = singleton_class
-    origin_method = method(sym)
+    origin_method = method(sym).unbind
     origin_method.send :define_singleton_method, :owner, proc{ owner }
 
     return origin_method
