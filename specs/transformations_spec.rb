@@ -21,7 +21,15 @@ describe WithTransformations do
   end
 
   describe '#inject' do
+    it do
+      a_method.inject({a: 78, c:12})
+      expect(an_object.a_public_method 9999, 5).to eql 95
+    end
 
+    it do
+      a_method.inject({c:8})
+      expect(an_object.a_public_method 5, 2).to eql 15
+    end
   end
 
   describe '#redirect_to' do
