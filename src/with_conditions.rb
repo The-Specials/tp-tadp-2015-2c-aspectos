@@ -18,6 +18,10 @@ module WithConditions
   end
 
   def has_parameters(number, block_type = lambda{|arg| true})
+    if block_type.is_a?(Regexp)
+      regex = block_type
+      block_type = lambda{|arg| regex.match arg[1]}
+    end
     lambda{|method| method.parameters.count(&block_type) == number}
   end
 
