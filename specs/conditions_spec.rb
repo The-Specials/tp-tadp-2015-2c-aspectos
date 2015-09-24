@@ -63,6 +63,21 @@ describe WithConditions do
       expect(has_parameters(2, mandatory).call(a_public_method)).to be_falsey
     end
 
+    it do
+      expect(has_parameters(1, /a/).call(a_public_method)).to be_truthy
+    end
+
+    it do
+      expect(has_parameters(1, /c/).call(a_public_method)).to be_truthy
+    end
+
+    it do
+      expect(has_parameters(3, //).call(a_public_method)).to be_truthy
+    end
+
+    it do
+      expect(has_parameters(3, /b/).call(a_public_method)).to be_falsey
+    end
   end
 
   describe '#neg' do
