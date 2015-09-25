@@ -22,13 +22,28 @@ describe WithTransformations do
 
   describe '#inject' do
     it do
-      a_method.inject({a: 78, c:12})
+      a_method.inject({a: 78, c: 12})
       expect(an_object.a_public_method 9999, 5).to eql 95
     end
 
     it do
-      a_method.inject({c:8})
+      a_method.inject({c: 8})
       expect(an_object.a_public_method 5, 2).to eql 15
+    end
+
+    it do
+      a_method.inject({ a: proc{ |receptor, sym, arg| 78 }, c: 12 })
+      expect(an_object.a_public_method 9999, 5).to eql 95
+    end
+
+    it do
+      a_method.inject({ c: proc do |receptor, sym, arg|
+                                receptor.aux = arg
+                                aux = receptor.another_method / 3
+                                receptor.aux = nil
+                                aux
+                            end})
+      expect(an_object.a_public_method 5, 2, 99).to eql 40
     end
   end
 
