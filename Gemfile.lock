@@ -21,6 +21,7 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
+  bundler (~> 1.10.6)
   rspec
 
 BUNDLED WITH
