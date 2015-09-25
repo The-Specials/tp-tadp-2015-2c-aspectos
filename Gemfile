@@ -1,3 +1,3 @@
 source 'http://rubygems.org/'
-gem 'bundler'  , "~> 1.10.6"
-gem 'rspec'
+gem 'bundler', "~> 1.10.6"
+gem 'rspec', "~> 3.3.0"
