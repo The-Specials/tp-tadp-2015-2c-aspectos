@@ -1,4 +1,4 @@
 rvm:
- - 2.0.0p647
+ - 2.0.0
 
 script: rspec specs
