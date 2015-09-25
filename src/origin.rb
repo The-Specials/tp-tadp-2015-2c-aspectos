@@ -22,6 +22,10 @@ module Origin
   def transform methods, &block
     methods.each{ |method| method.instance_eval &block }
   end
+
+  def call_unbound unbound_method, *args
+    unbound_method.bind(self).call *args
+  end
 end
 
 class Module
