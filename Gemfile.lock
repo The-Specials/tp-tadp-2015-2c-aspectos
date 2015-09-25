@@ -22,7 +22,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.10.6)
-  rspec
+  rspec (~> 3.3.0)
 
 BUNDLED WITH
    1.10.6
