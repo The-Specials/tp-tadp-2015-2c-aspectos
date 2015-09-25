@@ -1,6 +1,6 @@
 class OrigenInvalido
   def get_origin
-    nil
+    []
   end
 end
 

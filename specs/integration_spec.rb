@@ -5,10 +5,10 @@ require_relative 'data/fixture_for_integration_specs'
 describe 'AOP example' do
   un_espadachin = Espadachin.new(Espada.new 100)
 
-  Aspects.send :initialize, 1
+  # Aspects.send :initialize, 1
 
   Aspects.on Kamikaze, Defensor, un_espadachin do
-    transform(where name(/^atacar$/)) do
+    transform(where names(/^atacar$/)) do
       instead do
         'Surprise!'
       end
