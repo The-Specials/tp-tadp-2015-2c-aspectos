@@ -10,7 +10,7 @@ module WithTransformations
     to_inject = arguments.map{ |arg| hash[arg] }
     instead &(
       proc do |*args|
-        injected_args = to_inject.combine(args) {|new, old| new.injected_value self, sym, old}
+        injected_args = to_inject.combine(args) { |new, old| new.injected_value(self, sym, old) }
         call_unbound orig_method, *injected_args
       end)
   end

@@ -26,7 +26,7 @@ describe 'Origen' do
 
     context 'when get_origenes is sended to a Regex Origen' do
       it do
-        expect(/.*/.get_origin.size).to eq(Object.constants.size)
+        expect(/.*/.get_origin.size).to eq(Object.constants.select {|const| Object.const_get(const).is_a? Module }.size)
       end
 
       it do

@@ -1,22 +1,25 @@
 require_relative 'with_conditions'
 
+module OriginSource
+  def get_origin
+    self
+  end
+end
+
 module Origin
   include WithConditions
-
-  def get_origin
-   self
-  end
+  include OriginSource
 
   def origin_method_names
     instance_methods(true).concat(private_instance_methods(true))
   end
 
   def origin_methods
-    origin_method_names.map { |name| instance_method name }
+    origin_method_names.map { |name| origin_method name }
   end
 
   def origin_method name
-    origin_methods.detect{ |method| method.name.eql? name }
+    instance_method name
   end
 
   def transform methods, &block
@@ -53,8 +56,10 @@ class Object
 end
 
 class Regexp
+  include OriginSource
+
   def get_origin
-    valid_constants = Object.constants.select{ |c| self.match(c) }
+    valid_constants = Object.constants.select{ |c| self.match(c) and Object.const_get(c).is_a? Module }
     valid_constants.map{ |c| Object.const_get(c) }
   end
 end

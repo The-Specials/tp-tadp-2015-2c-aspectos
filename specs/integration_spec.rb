@@ -1,11 +1,11 @@
 require 'rspec'
 require_relative '../src/aspects'
 require_relative 'data/fixture_for_integration_specs'
+require_relative '../src/with_transformations'
+
 
 describe 'AOP example' do
   un_espadachin = Espadachin.new(Espada.new 100)
-
-  # Aspects.send :initialize, 1
 
   Aspects.on Kamikaze, Defensor, un_espadachin do
     transform(where names(/^atacar$/)) do

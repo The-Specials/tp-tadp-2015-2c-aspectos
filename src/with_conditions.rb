@@ -27,7 +27,7 @@ module WithConditions
 
   def neg(condition, *more_conditions)
     conditions = more_conditions.unshift condition
-    lambda{|method| not conditions.any? {|condition| condition.call(method)}}
+    lambda{|method| not conditions.any? {|cond| cond.call(method)}}
   end
 
   private
