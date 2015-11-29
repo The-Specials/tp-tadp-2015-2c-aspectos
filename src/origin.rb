@@ -63,3 +63,21 @@ class Regexp
     valid_constants.map{ |c| Object.const_get(c) }
   end
 end
+
+class Array
+  include OriginSource
+
+  def get_origin
+    raise ArgumentError, 'origen invalido' unless valid?
+
+    /.*/.get_origin.select { | origin | origin.ancestors.includes? self }
+  end
+
+  def valid?
+    size > 1 and count { | m | m.is_a? Class } < 2
+  end
+
+  def includes? other_array
+    (other_array - self).empty?
+  end
+end

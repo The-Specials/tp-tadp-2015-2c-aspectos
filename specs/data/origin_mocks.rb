@@ -27,3 +27,18 @@ class RegexMock
     [ModuleMock, ClassMock]
   end
 end
+
+class A
+  include Comparable
+end
+
+class B < A
+end
+
+class C < B
+  include ModuleMock
+end
+
+class D < A
+  include Enumerable
+end

@@ -1,6 +1,7 @@
 require 'rspec'
 require_relative '../src/origin'
 require_relative 'data/mocks_for_conditions'
+require_relative '../specs/data/origin_mocks'
 
 describe 'Origen' do
 
@@ -42,6 +43,30 @@ describe 'Origen' do
       end
     end
 
+    context 'when get_origenes is sended to a Set Origin' do
+      it do
+        expect{[A].get_origin}.to raise_error(ArgumentError, 'origen invalido')
+      end
+
+      it do
+        expect{[].get_origin}.to raise_error(ArgumentError, 'origen invalido')
+      end
+      it do
+        expect{[ModuleMock].get_origin}.to raise_error(ArgumentError, 'origen invalido')
+      end
+
+      it do
+        expect([ModuleMock, Comparable].get_origin).to eq([C])
+      end
+
+      it do
+        expect([ModuleMock, B].get_origin).to eq([C])
+      end
+
+      it do
+        expect([Comparable, A].get_origin).to eq([A, B, C, D])
+      end
+    end
   end
 
   describe 'owner' do
